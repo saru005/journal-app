@@ -1,0 +1,29 @@
+weather:
+  api:
+    key: 2502cb978429390539a501c2a012c6ea
+    url: https://api.weatherstack.com/current?access_key=${weather.api.key}&query=CITY
+
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  application:
+    name: journalApp
+
+  data:
+    mongodb:
+      # Local MongoDB configuration
+      uri: mongodb://localhost:27017/journalappdb
+      auto-index-creation: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: your_email@gmail.com
+    password: your_app_password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
