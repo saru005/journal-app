@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,20 +24,15 @@ public class PublicController {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @PostMapping("/sugnup")
-    public boolean createUser(@RequestBody User user){
-        log.info("Processing data...");
-        log.debug("Debug log for extra details");
-        log.error("Error occurred!");
-        userService.saveUser(user);
-        return  true;
-    }
-
-    @PostMapping("/login")
-    public boolean login(@RequestBody User user){
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword()));
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserName());
-        userService.saveUser(user);
-        return  true;
+    @PostMapping("/signup")
+    public ResponseEntity<?> createUser(@RequestBody User user){
+        log.info("Processing signup for username: {}", user.getUserName());
+        try {
+            userService.saveUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
+        } catch (Exception e) {
+            log.error("Error while creating user", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
     }
 }
