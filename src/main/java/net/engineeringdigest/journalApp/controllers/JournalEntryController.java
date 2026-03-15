@@ -43,6 +43,8 @@ public class JournalEntryController {
             journalEntryService.saveEntry(myEntry, userName);
             return new ResponseEntity<>(myEntry,HttpStatus.CREATED);
         }catch (Exception e){
+            System.out.println("Error while creating journal entry: " + e.getMessage());
+            e.printStackTrace();
             return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
